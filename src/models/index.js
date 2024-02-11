@@ -1,37 +1,54 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
+const fs = require("fs");
+const path = require("path");
+const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../database/config.js');
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../database/config.js");
 const db = {};
 
 let sequelize;
+
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+// Percorre todos os arquivos do diretório models e importa todos os arquivos que terminam com .js
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+    );
   })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes
+    );
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+// Percorre todos os modelos e executa o método associate (Cardinalidade das tabelas) de cada modelo caso exista
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
+
+// Criando o banco de dados e as tabelas caso não existam
+sequelize.sync({ force: false });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// Exporta o objeto db que contém todos os modelos e o objeto Sequelize
 module.exports = db;

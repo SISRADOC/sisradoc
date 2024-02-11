@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define(
-        'usuario', 
+        'Usuario', 
         {
             id:{
                 type: DataTypes.INTEGER,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             
         },
         {
-            tableName: 'usuario', // Define o nome da tabela
+            tableName: 'Usuario', // Define o nome da tabela
             timestamps: false, // Desativa a criação automática das colunas createdAt e updatedAt
             freezeTableName: true, // Define o nome da tabela como o nome do modelo 
         });

@@ -5,6 +5,5 @@ const router = express.Router();
 // Rota para a página de login
 router.post('/cadastro', authController.register);
 router.get('/login', authController.login);
-router.get('/list', authController.list);
 
 module.exports = router;

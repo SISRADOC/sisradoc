@@ -6,8 +6,9 @@ const fileupload = require('express-fileupload');
 const cors = require('cors'); // Impedir que tenha conflitos de servidores
 const userRouter = require('./routes/UserRoutes'); // Importar a rota do usuário
 const authRouter = require('./routes/AuthRoutes'); // Importar a rota de autenticação
-const app = express(); // Inicializar o servidor
+const {sequelize} = require('./models');
 const PORT = 5000; // Porta definida
+const app = express(); // Inicializar o servidor
 
 app.use(bodyParser.json()); 
 
