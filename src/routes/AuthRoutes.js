@@ -3,7 +3,7 @@ const authController = require('../controllers/AuthController'); // Controller d
 const router = express.Router();
 
 // Rota para a página de login
+router.post('/login', authController.login);
 router.post('/cadastro', authController.register);
-router.get('/login', authController.login);
 
 module.exports = router;

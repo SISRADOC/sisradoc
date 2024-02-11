@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "swagger": "node src/docs/swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,10 @@
     "mysql2": "^3.9.1",
     "nodemon": "^2.0.20",
     "pg": "^8.11.3",
-    "sequelize": "^6.36.0"
+    "sequelize": "^6.36.0",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.7"
   }
 }

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken"); // Importar JWT
 const Sequelize = require("sequelize"); // Importar Sequelize
 
 const UserController = {
+
   register: async (req, res) => {
     const { nome, senha, email } = req.body;
 
@@ -14,9 +15,6 @@ const UserController = {
     }
 
     const cryptoPassword = bcrypt.hashSync(senha, 10); // Encriptar a senha
-    console.log(cryptoPassword);
-
-    const user = { nome, email, cryptoPassword }; // Criar um objeto novo com a senha criptografada para salvar no banco
 
     const insertedUser = {
       nome: nome,
@@ -26,7 +24,7 @@ const UserController = {
 
     await Usuario.create(insertedUser); // Salvar o usuário no banco (com a senha criptografada)
 
-    return res.status(201).json(insertedUser);
+    return res.status(201);
   },
 
   login: async (req, res) => {

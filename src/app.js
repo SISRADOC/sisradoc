@@ -1,17 +1,22 @@
+// Dependências
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const fileupload = require('express-fileupload');
 const cors = require('cors'); // Impedir que tenha conflitos de servidores
-const userRouter = require('./routes/UserRoutes'); // Importar a rota do usuário
+const swaggerFile = require('./docs/swagger.json');
+const swaggerUi = require('swagger-ui-express');
+
+// Rotas
 const authRouter = require('./routes/AuthRoutes'); // Importar a rota de autenticação
+
+// Configurações
 const {sequelize} = require('./models');
 const PORT = 5000; // Porta definida
 const app = express(); // Inicializar o servidor
 
 app.use(bodyParser.json()); 
-
 app.use(express.json());
 
 app.use(fileupload({
@@ -30,7 +35,9 @@ app.use(
 );
 
 // Inicializar as rotas
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(authRouter); // Inicializar a rota de autenticação
+
 //app.use(userRouter); // Inicializar a rota do usuário
 
 // Escuta da porta do servidor
