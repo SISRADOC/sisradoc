@@ -4,21 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/index.js"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.2",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.3",
-    "express-session": "^1.18.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.1",
+    "nodemon": "^2.0.20",
+    "pg": "^8.11.3",
+    "sequelize": "^6.36.0"
   }
 }
