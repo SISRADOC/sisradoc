@@ -65,7 +65,7 @@ async function processPDF(pdfFilePath, res) {
         wordsFound[word] = capturedTexts;
     });
 
-    res.json({ wordsFound });
+    res.status(200).json({ wordsFound });
   } catch (error) {
     console.error("An error occurred while processing the PDF:", error);
     res.status(500).json({ error: "Failed to process the PDF" });

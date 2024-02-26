@@ -19,6 +19,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage});
 
-router.post('/disciplinas/ministradas', upload.single('file') , DiscController.discMinistradas);
+router.post('/pdf/ministradas', upload.single('file') , DiscController.discMinistradas);
 
 module.exports = router;
