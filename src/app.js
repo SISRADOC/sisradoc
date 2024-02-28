@@ -17,6 +17,7 @@ const pdf = require('html-pdf');
 // Rotas
 const authRouter = require('./routes/AuthRoutes'); // Importar a rota de autenticação
 const discRouter = require('./routes/DisciplinasRoutes'); // Importar a rota de disciplina
+const diariosRouter = require('./routes/DiariosRoutes'); // Importar a rota de diarios
 
 // Configurações
 const {sequelize} = require('./models');
@@ -62,6 +63,7 @@ app.use(authRouter); // Inicializar a rota de autenticação
 // });
 
 app.use(discRouter); // Inicializar a rota de disciplina
+app.use(diariosRouter);
 
 //app.use(userRouter); // Inicializar a rota do usuário
 
