@@ -39,10 +39,8 @@ async function processPDF(pdfFilePath, res) {
     const pdfText = data.text;
 
     const wordsToFind = [
-      "Centro",
-      "Departamento",
-      "Código",
       "Disciplina",
+      "Código",
       "Carga Horária",
     ];
     let wordsFound = {};
