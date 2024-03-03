@@ -71,9 +71,9 @@ const UserController = {
     try {
       token = jwt.sign(
         {
-          // Dados que serão salvos no token
-          userId: userFound.id,
-          userEmail: userFound.email,
+          nomeUsuario: userFound.nomeUsuario,
+          email: userFound.email,
+          system: "sisradoc"
         },
         "secretkeynotrevealed", // Chave secreta para a criação do token
         { expiresIn: "24h" }
