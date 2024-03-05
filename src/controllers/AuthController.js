@@ -71,7 +71,7 @@ const UserController = {
     try {
       token = jwt.sign(
         {
-          nomeUsuario: userFound.nomeUsuario,
+          name: userFound.nomeUsuario,
           email: userFound.email,
           system: "sisradoc"
         },
