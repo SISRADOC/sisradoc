@@ -85,6 +85,18 @@ const UserController = {
     // Retona o token válido ao usuário
     return res.status(200).json({ token });
   },
+
+  verificarUsuario: async (req, res) => {
+    const email = req.query.email;
+
+    userFound = await Usuario.findOne({ where: { email }});
+
+    if (!userFound) {
+      return res.status(400).json({ message: "User not exists"});
+    } else {
+      return res.status(200).json({ message: "User exists"})
+    }
+  }
 };
 
 module.exports = UserController;
