@@ -28,11 +28,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // Para aceitar requisiçõe
 app.use(bodyParser.json()); 
 app.use(express.json());
 
-/* app.use(fileupload({
-    useTempFiles: true,
-    tempFileDir: path.join(__dirname, 'temp')
-})); */
-
 app.use(cors());
 
 app.use(
@@ -47,20 +42,6 @@ app.use(
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(authRouter); // Inicializar a rota de autenticação
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.originalname);
-//     }
-// });
-
-// const upload = multer();
-
-// app.post('/disciplinas/ministradas', upload.single('file'), (req, res) => {
-//     res.json(req.file);
-// });
 
 app.use(discRouter); // Inicializar a rota de disciplina
 app.use(diariosRouter);
