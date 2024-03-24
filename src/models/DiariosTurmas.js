@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
 
+      codigo_da_disciplina: {
+        type: DataTypes.STRING(5),
+        allowNull: false,
+      },
+
       carga_horaria: {
         type: DataTypes.FLOAT,
         allowNull: false,
@@ -23,10 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
 
-      codigo_da_disciplina: {
-        type: DataTypes.STRING(5),
-        allowNull: false,
-      },
+
     },
     {
         tableName: "Diarios_turmas",

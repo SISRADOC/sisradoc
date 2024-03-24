@@ -1,11 +1,9 @@
 const express = require('express');
-const DiariosController = require('../controllers/DiariosController')
+const AulasLetivasController = require('../controllers/AulasLetivasController')
 const router = express.Router();
 const multer = require('multer');
 
 // Rota para PDF de disciplinas ministradas
-
-//const upload = multer({ dest: 'uploads/'})
 
 // Configuração do multer
 const storage = multer.diskStorage({
@@ -19,6 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage});
 
-router.post('/pdf/diarios', upload.single('file') , DiariosController.diariosTurmas);
+router.post('/pdf/aulas_letivas', upload.single('file') , AulasLetivasController.diariosTurmas);
 
 module.exports = router;
