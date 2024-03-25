@@ -49,7 +49,55 @@ const extrairDados = {
         } catch (error) {
             console.error(error);
         }
-    }
+    },
+
+    extrair_projetos: async (caminho_pdf, palavras, regexp, bandeira, separador_padrao) => {
+        try {
+            const pdfBuffer = fs.readFileSync(caminho_pdf);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+
+            let palavras_encontradas = {};
+
+            palavras.forEach((palavra) => {
+                const regex = new RegExp(`${palavra}${regexp}`, bandeira);
+                const matches = pdfText.match(regex);
+
+                const palavras_capturadas = matches ? matches.map((match) => match.split(separador_padrao)[1].trim()) : [];
+                palavras_encontradas[palavra] = palavras_capturadas;
+            });
+
+            return palavras_encontradas;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
+
+    extrair_avaliacao_discente: async (caminho_pdf, palavras) => {
+        try {
+            const pdfBuffer = fs.readFileSync(caminho_pdf);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+
+            const regex = /([A-Z]+\d+)(?:.*?Média\s*([\d,]+))?/g;
+            let componentesCurriculares = [];
+            let medias = [];
+            let match;
+
+            while ((match = regex.exec(pdfText)) !== null) {
+                if (match[1]) {
+                    componentesCurriculares.push(match[1].trim());
+                    medias.push(match[2] ? match[2].trim() : null);
+                }
+            }
+
+            return { componentesCurriculares, medias };
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
 }
 
 module.exports = extrairDados;
