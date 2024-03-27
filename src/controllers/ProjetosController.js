@@ -24,16 +24,18 @@ const ProjetosController = {
         : null;
       if (fileExtension === "application/pdf") {
         try {
-          // diario_turma = await extrairDados(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao);
-
-          const [projetos] = await Promise.all([
-            await extrairDados.extrair_projetos(caminho_pdf, palavras_projeto, regexp_projeto, bandeira, separador_padrao),
-          ])
-
-          //const diario_turma = await extrairDados(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao);
-          // const docentes_envolvidos = await extrairDados(caminho_pdf, [], regexp_docente, bandeira, " - ");
-
-          res.status(200).json({ projetos })
+          // Blindando a aplicação de possíveis erros de pdfs inválidos
+          const pdf_valido = await extrairDados.validar_pdf(caminho_pdf, [
+            "Projeto de Pesquisa",
+            "Dados do Projeto Pesquisa"
+          ]);
+          
+          if(!pdf_valido){
+            return res.status(400).json({ erro: "Arquivo pdf inválido! Verifique se o arquivo contém informações de aprojeto de pesquisa."});
+          } else{
+            const projetos = await extrairDados.extrair_projetos(caminho_pdf, palavras_projeto, regexp_projeto, bandeira, separador_padrao);
+            res.status(200).json({ projetos })
+          }
         } catch (error) {
           return res.status(500).json({ erro: error.message })
         }

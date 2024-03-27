@@ -26,17 +26,20 @@ const AulasLetivasController = {
         : null;
       if (fileExtension === "application/pdf") {
         try {
-          // diario_turma = await extrairDados(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao);
+          // Blindando a aplicação de possíveis erros de pdfs inválidos
+          const pdf_valido = await extrairDados.validar_pdf(caminho_pdf, ["Diário de Turma"]);
+          
+          if(!pdf_valido){
+            return res.status(400).json({ erro: "Arquivo pdf inválido! Verifique se o arquivo contém informações de diário de turma."});
+          } else{
+            const [diario_turma, docentes_envolvidos] = await Promise.all([
+              await extrairDados.extrair_diario(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao),
+              await extrairDados.extrair_docentes(caminho_pdf, palavra_docente)
+            ]);
+            
+            res.status(200).json({ diario_turma, docentes_envolvidos })
+          }
 
-          const [diario_turma, docentes_envolvidos] = await Promise.all([
-            await extrairDados.extrair_diario(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao),
-            await extrairDados.extrair_docentes(caminho_pdf, palavra_docente)
-          ])
-
-          //const diario_turma = await extrairDados(caminho_pdf, palavras_diario, regexp_diario, bandeira, separador_padrao);
-          // const docentes_envolvidos = await extrairDados(caminho_pdf, [], regexp_docente, bandeira, " - ");
-
-          res.status(200).json({ diario_turma, docentes_envolvidos })
         } catch (error) {
           return res.status(500).json({ erro: error.message })
         }

@@ -2,6 +2,31 @@ const fs = require('fs');
 const PDFParser = require("pdf-parse");
 
 const extrairDados = {
+
+    validar_pdf: async (caminho_pdf, titulos) => {
+        try{
+            const pdfBuffer = fs.readFileSync(caminho_pdf);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+            let ocorrencias = 0;
+
+            titulos.forEach((titulo) => {
+                const regex = new RegExp(titulo, 'gi');
+                ocorrencias += (pdfText.match(regex) || []).length;
+                console.log(`Ocorrências de ${titulo}: ${ocorrencias}`);
+            })
+
+            if (ocorrencias === titulos.length){
+                return true;
+            } else {
+                return false
+            }
+
+        } catch (error) {
+            return error;
+        }
+    },
+
     extrair_diario: async (caminho_pdf, palavras, regexp, bandeira, separador_padrao) => {
         try {
             const pdfBuffer = fs.readFileSync(caminho_pdf);
@@ -13,7 +38,7 @@ const extrairDados = {
             // Para cada palavra a ser encontrada
             palavras.forEach((palavra) => {
                 // Crie uma expressão regular para encontrar a palavra e o texto que a segue
-                const regex = new RegExp(`${palavra}${regexp}`, bandeira); // TODO: generalizar a regex para aceitar qualquer regra de extração
+                const regex = new RegExp(`${palavra}${regexp}`, bandeira); 
 
                 // Encontre todas as correspondências e capture o texto que segue a palavra
                 const matches = pdfText.match(regex);
@@ -80,7 +105,7 @@ const extrairDados = {
             const data = await PDFParser(pdfBuffer);
             const pdfText = data.text;
 
-            const regex = /([A-Z]+\d+)\s*[^\n]*/gm
+            const regex = new RegExp(/([A-Z]+\d+)\s*[^\n]*/gm);
             let componentesCurriculares = new Set(); // Usando um Set para armazenar valores únicos
             let match;
 

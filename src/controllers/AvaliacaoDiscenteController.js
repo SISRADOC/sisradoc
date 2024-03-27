@@ -1,13 +1,16 @@
-const { ExtractionException, ProcessPDFError, DailyClassError } = require("../exceptions/Exceptions");
+const {
+  ExtractionException,
+  ProcessPDFError,
+  DailyClassError,
+} = require("../exceptions/Exceptions");
 const extrairDados = require("../utils/ProcessPDF");
 
 const AvaliacaoDiscenteController = {
   avaliacaoDiscente: async (req, res) => {
-
     try {
       const palavras_avaliacao = ["Componente Curricular", "Média"];
-      const regexp_avaliacao = ':\\s*([^\\n]+)';
-      const bandeira = 'gi';
+      const regexp_avaliacao = ":\\s*([^\\n]+)";
+      const bandeira = "gi";
       const separador_padrao = ":";
 
       if (!req.file) {
@@ -24,11 +27,30 @@ const AvaliacaoDiscenteController = {
         : null;
       if (fileExtension === "application/pdf") {
         try {
-          const avaliacao_discente = await extrairDados.extrair_avaliacao_discente(caminho_pdf, palavras_avaliacao, regexp_avaliacao, bandeira, separador_padrao);
+          // Blindando a aplicação de possíveis erros de pdfs inválidos
+          const pdf_valido = await extrairDados.validar_pdf(caminho_pdf, [
+            "Comentários dos discentes na avaliação da docência",
+          ]);
 
-          res.status(200).json({ avaliacao_discente })
+          if (!pdf_valido) {
+            return res
+              .status(400)
+              .json({
+                erro: "Arquivo pdf inválido! Verifique se o arquivo contém informações de avaliação da docência.",
+              });
+          } else {
+            const avaliacao_discente =
+              await extrairDados.extrair_avaliacao_discente(
+                caminho_pdf,
+                palavras_avaliacao,
+                regexp_avaliacao,
+                bandeira,
+                separador_padrao
+              );
+            res.status(200).json({ avaliacao_discente });
+          }
         } catch (error) {
-          return res.status(500).json({ erro: error.message })
+          return res.status(500).json({ erro: error.message });
         }
       } else {
         return res.status(400).json({ erro: "Formato de arquivo inválido" });
