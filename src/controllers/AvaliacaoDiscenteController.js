@@ -39,16 +39,17 @@ const AvaliacaoDiscenteController = {
                 erro: "Arquivo pdf inválido! Verifique se o arquivo contém informações de avaliação da docência.",
               });
           } else {
-            const avaliacao_discente =
+            const avaliacao_discente_codigo =
               await extrairDados.extrair_avaliacao_discente_codigo(
                 caminho_pdf,
                 palavras_avaliacao,
                 regexp_avaliacao,
                 bandeira,
-                separador_padrao
-              );
-            res.status(200).json({ avaliacao_discente });
+                separador_padrao);
+
+            res.status(200).json({ avaliacao_discente_codigo });
           }
+
         } catch (error) {
           return res.status(500).json({ erro: error.message });
         }

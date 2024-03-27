@@ -4,24 +4,26 @@ const PDFParser = require("pdf-parse");
 const extrairDados = {
 
     validar_pdf: async (caminho_pdf, titulos) => {
-        try{
+        try {
             const pdfBuffer = fs.readFileSync(caminho_pdf);
             const data = await PDFParser(pdfBuffer);
             const pdfText = data.text;
             let ocorrencias = 0;
-
+    
             titulos.forEach((titulo) => {
                 const regex = new RegExp(titulo, 'gi');
-                ocorrencias += (pdfText.match(regex) || []).length;
-                console.log(`Ocorrências de ${titulo}: ${ocorrencias}`);
-            })
-
-            if (ocorrencias === titulos.length){
+                const numOcorrencias = (pdfText.match(regex) || []).length;
+                console.log(`Ocorrências de ${titulo}: ${numOcorrencias}`);
+                if (numOcorrencias > 0) {
+                    ocorrencias++;
+                }
+            });
+    
+            if (ocorrencias === titulos.length) {
                 return true;
             } else {
-                return false
+                return false;
             }
-
         } catch (error) {
             return error;
         }
@@ -123,6 +125,7 @@ const extrairDados = {
             throw error;
         }
     },
+    
     
     extrair_projetos: async (caminho_pdf, palavras, regexp, bandeira, separador_padrao) => {
         try {
