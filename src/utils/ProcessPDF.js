@@ -80,19 +80,20 @@ const extrairDados = {
             const data = await PDFParser(pdfBuffer);
             const pdfText = data.text;
 
-            const regex = /([A-Z]+\d+)(?:.*?Média\s*([\d,]+))?/g;
-            let componentesCurriculares = [];
-            let medias = [];
+            const regex = /([A-Z]+\d+)\s*[^\n]*/gm
+            let componentesCurriculares = new Set(); // Usando um Set para armazenar valores únicos
             let match;
 
             while ((match = regex.exec(pdfText)) !== null) {
                 if (match[1]) {
-                    componentesCurriculares.push(match[1].trim());
-                    medias.push(match[2] ? match[2].trim() : null);
+                    componentesCurriculares.add(match[1].trim()); // Adicionando ao conjunto
                 }
             }
 
-            return { componentesCurriculares, medias };
+            // Convertendo o Set de volta para um array
+            const componentesCurricularesUnicos = [...componentesCurriculares];
+
+            return componentesCurricularesUnicos;
         } catch (error) {
             console.error(error);
             throw error;
