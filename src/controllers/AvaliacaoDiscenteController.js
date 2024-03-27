@@ -40,7 +40,7 @@ const AvaliacaoDiscenteController = {
               });
           } else {
             const avaliacao_discente =
-              await extrairDados.extrair_avaliacao_discente(
+              await extrairDados.extrair_avaliacao_discente_codigo(
                 caminho_pdf,
                 palavras_avaliacao,
                 regexp_avaliacao,

@@ -97,8 +97,33 @@ const extrairDados = {
             throw error;
         }
     },
-    
 
+    extrair_avaliacao_discente_codigo: async (caminho_pdf, palavras) => {
+        try {
+            const pdfBuffer = fs.readFileSync(caminho_pdf);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+
+            const regex = new RegExp(/([A-Z]+\d+)\s*-(?=\s)/gm);
+            let componentesCurriculares = new Set(); // Usando um Set para armazenar valores únicos
+            let match;
+
+            while ((match = regex.exec(pdfText)) !== null) {
+                if (match[1]) {
+                    componentesCurriculares.add(match[1].trim()); // Adicionando ao conjunto
+                }
+            }
+
+            // Convertendo o Set de volta para um array
+            const componentesCurricularesUnicos = [...componentesCurriculares];
+
+            return componentesCurricularesUnicos;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
+    
     extrair_projetos: async (caminho_pdf, palavras, regexp, bandeira, separador_padrao) => {
         try {
             const pdfBuffer = fs.readFileSync(caminho_pdf);
@@ -116,32 +141,6 @@ const extrairDados = {
             });
 
             return palavras_encontradas;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    },
-
-    extrair_avaliacao_discente: async (caminho_pdf, palavras) => {
-        try {
-            const pdfBuffer = fs.readFileSync(caminho_pdf);
-            const data = await PDFParser(pdfBuffer);
-            const pdfText = data.text;
-
-            const regex = new RegExp(/([A-Z]+\d+)\s*[^\n]*/gm);
-            let componentesCurriculares = new Set(); // Usando um Set para armazenar valores únicos
-            let match;
-
-            while ((match = regex.exec(pdfText)) !== null) {
-                if (match[1]) {
-                    componentesCurriculares.add(match[1].trim()); // Adicionando ao conjunto
-                }
-            }
-
-            // Convertendo o Set de volta para um array
-            const componentesCurricularesUnicos = [...componentesCurriculares];
-
-            return componentesCurricularesUnicos;
         } catch (error) {
             console.error(error);
             throw error;
