@@ -65,7 +65,7 @@ const extrairDados = {
             const pdfText = data.text;
 
             // Crie uma expressão regular para encontrar o texto que segue a palavra
-            const regex = new RegExp(/[A-Z\s]+(?=\s-\s*(\d+h))/);
+            const regex = new RegExp(/[A-Z][A-Za-z\s]+?(?=\s-\s*\d+h)/g);
 
             // Encontre todas as correspondências e capture o texto que segue a palavra
             const matches = pdfText.match(regex);
@@ -75,6 +75,29 @@ const extrairDados = {
             console.error(error);
         }
     },
+
+    extrair_ch_docentes: async(caminho_pdf) => {
+        try {
+            const pdfBuffer = fs.readFileSync(caminho_pdf);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+    
+            // Crie uma expressão regular para capturar apenas o ch da segunda pessoa
+            const regex = /\d+h(?![\s\S]*?\d+h)/g;
+    
+            let horas = [];
+            let match;
+            while ((match = regex.exec(pdfText)) !== null) {
+                horas.push(match[0]); // Captura apenas as horas (ch) da segunda pessoa
+            }
+    
+            return horas;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    },
+    
 
     extrair_projetos: async (caminho_pdf, palavras, regexp, bandeira, separador_padrao) => {
         try {
